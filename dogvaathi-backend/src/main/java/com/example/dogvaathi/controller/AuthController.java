@@ -1,5 +1,6 @@
 package com.example.dogvaathi.controller;
 
+import java.util.Map;
 import com.example.dogvaathi.model.User;
 import com.example.dogvaathi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +41,25 @@ public class AuthController {
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
 
         if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid email or password");
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Invalid email or password"));
         }
 
         User user = userOptional.get();
 
         if (!user.getPassword().equals(request.getPassword())) {
-            return ResponseEntity.badRequest().body("Invalid email or password");
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Invalid email or password"));
         }
 
-        return ResponseEntity.ok(user.getRole());
+        return ResponseEntity.ok(
+                Map.of(
+                        "message", "Login successful",
+                        "role", user.getRole()
+                )
+        );
     }
+
 
 
 
